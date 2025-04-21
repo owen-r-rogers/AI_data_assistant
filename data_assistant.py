@@ -215,7 +215,7 @@ def get_accession(system_prompt, user_prompt):
 
     # initialize report
     report = Report(guess, evaluation)
-    report_sp = 'You are the final reporter for taking in an initial guess and a criticial evaluation of that guess, reporting the final correct answer to the user.'
+    report_sp = 'You are the final reporter for taking in an initial guess and a criticial evaluation.md of that guess, reporting the final correct answer to the user.'
     report_up = f'Please integrate the critique: "{evaluation}", of the initial guess: "{guess}".'
     final_report = report.report(user_prompt=report_up, system_prompt=report_sp)
 
