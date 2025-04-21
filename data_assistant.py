@@ -236,7 +236,7 @@ def fetch_sequence(accession_no,
                    db='nucleotide',
                    rettype='gb',
                    retmode='text',
-                   email='orogers@wesleyan.edu',
+                   email='your_email_here',
                    verbose=True):
 
     Entrez.email = email
