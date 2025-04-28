@@ -5,15 +5,20 @@ import matplotlib.pyplot as plt
 import openai
 import streamlit as st
 import datetime
+
 from dotenv import load_dotenv
+
 from Bio import Blast
 from Bio import Entrez
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
 from Bio import SeqIO
+
 from openai import OpenAI
+
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_openai import OpenAIEmbeddings
 
 
 """
