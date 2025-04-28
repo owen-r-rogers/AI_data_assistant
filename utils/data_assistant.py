@@ -16,25 +16,13 @@ from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage
 
 
-# set page config
-st.set_page_config(page_title='AI assistant for biomedical data', layout='wide')
-st.title('Automated clustering and analysis of BLAST search')
+"""
 
-# Create a box at the bottom of the page for input
-prompt = st.chat_input('Ask a question')
+Classes - all of the strings are commented out here because they're being displayed on the streamlit UI if not
 
-# Create another box for inputting the accesion number
-accession_input = st.text_input('Enter NCBI accession number')
-st.write(f'You entered {accession_input}')
+    These will be a lot more flexible in the future, right now I just wanted to make sure I could write these classes so that they would work. Next I need to fine-tune.
 
-
-# """
-#
-# Classes - all of the strings are commented out here because they're being displayed on the streamlit UI if not
-#
-#     These will be a lot more flexible in the future, right now I just wanted to make sure I could write these classes so that they would work. Next I need to fine-tune.
-#
-# """
+"""
 
 
 class Draft:
@@ -304,21 +292,33 @@ def process_stream(stream, save=True, save_name='BLAST_results'):
 
 
 
-# """
-# Future (immediate) steps:
-#
-#     RAG with paper about BLAST and sequence-based drug design
-#     Make a function to color the structure of a target by therapeutic targeting
-#         BONUS: make this something that I can spin around in a window in streamlit
-#
-# """
+"""
+Future (immediate) steps:
+
+    RAG with paper about BLAST and sequence-based drug design
+    Make a function to color the structure of a target by therapeutic targeting
+        BONUS: make this something that I can spin around in a window in streamlit
+
+"""
 
 
-if prompt:
-    accession = get_accession('You are an expert in telling people NCBI accession codes.', prompt)
-    st.write(f"Predicted accession number: {accession}")
+if __name__ == "__main__":
+    # set page config
+    st.set_page_config(page_title='AI assistant for biomedical data', layout='wide')
+    st.title('Automated clustering and analysis of BLAST search')
 
-if accession_input:
-    handle = nucleotide_blast(accession_input)
-    blast_results = process_stream(handle, save=False)
-    st.write(blast_results)
+    # Create a box at the bottom of the page for input
+    prompt = st.chat_input('Ask a question')
+
+    # Create another box for inputting the accession number
+    accession_input = st.text_input('Enter NCBI accession number')
+    st.write(f'You entered {accession_input}')
+
+    if prompt:
+        accession = get_accession('You are an expert in telling people NCBI accession codes.', prompt)
+        st.write(f"Predicted accession number: {accession}")
+
+    if accession_input:
+        handle = nucleotide_blast(accession_input)
+        blast_results = process_stream(handle, save=False)
+        st.write(blast_results)
