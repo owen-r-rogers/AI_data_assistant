@@ -1,0 +1,51 @@
+title,length,e_value,score,query_start,query_end
+"gi|1700998533|ref|NM_021804.3| Homo sapiens angiotensin converting enzyme 2 (ACE2), transcript variant 2, mRNA",3596,0.0,6678.0,1,3339
+"gi|66863987|dbj|AB193259.1| Homo sapiens ace2 mRNA for angiotensin-converting enzyme 2, complete cds, tissue_type: lung",3605,0.0,6678.0,1,3339
+"gi|1700998531|ref|NM_001371415.1| Homo sapiens angiotensin converting enzyme 2 (ACE2), transcript variant 1, mRNA",3339,0.0,6678.0,1,3339
+"gi|8650465|gb|AF241254.1|AF241254 Homo sapiens angiotensin converting enzyme-like protein mRNA, complete cds",3405,0.0,6678.0,1,3339
+"gi|66863989|dbj|AB193260.1| Homo sapiens ace2 mRNA for angiotensin-converting enzyme 2, complete cds, tissue_type: testis",3470,0.0,6678.0,1,3339
+"gi|37747876|gb|BC059378.1| Homo sapiens cDNA clone IMAGE:5296531, partial cds",3375,0.0,6669.0,1,3337
+"gi|28839033|gb|BC048144.1| Homo sapiens angiotensin I converting enzyme (peptidyl-dipeptidase A) 2, mRNA (cDNA clone IMAGE:5297522) >gi|29127010|gb|BC048094.1| Homo sapiens angiotensin I converting enzyme (peptidyl-dipeptidase A) 2, mRNA (cDNA clone MGC:57146 IMAGE:5297380), complete cds",3339,0.0,6634.0,16,3339
+"gi|9802432|gb|AF291820.1|AF291820 Homo sapiens ACE-related carboxypeptidase ACE2 mRNA, complete cds",3325,0.0,6620.0,30,3339
+"gi|21432080|gb|BC032938.1| Homo sapiens cDNA clone IMAGE:4830668, containing frame-shift errors",3337,0.0,6614.0,16,3334
+"gi|25140225|gb|BC039902.1| Homo sapiens angiotensin I converting enzyme (peptidyl-dipeptidase A) 2, mRNA (cDNA clone MGC:47598 IMAGE:5243048), complete cds",3348,0.0,6610.0,32,3336
+"gi|2490809741|ref|XM_008974180.3| PREDICTED: Pan paniscus angiotensin converting enzyme 2 (ACE2), mRNA",6570,0.0,6574.0,1,3339
+gi|5817159|emb|AL110224.1| Homo sapiens mRNA; cDNA DKFZp434A014 (from clone DKFZp434A014); partial cds,3341,0.0,6561.0,52,3334
+"gi|2697861032|ref|XM_016942979.3| PREDICTED: Pan troglodytes angiotensin converting enzyme 2 (ACE2), transcript variant X1, mRNA",3540,0.0,6545.0,1,3339
+"gi|2695108862|ref|XM_063702989.1| PREDICTED: Gorilla gorilla gorilla angiotensin converting enzyme 2 (ACE2), transcript variant X2, mRNA",3477,0.0,6543.0,1,3339
+"gi|2695108865|ref|XM_019019204.3| PREDICTED: Gorilla gorilla gorilla angiotensin converting enzyme 2 (ACE2), transcript variant X3, mRNA",3522,0.0,6543.0,1,3339
+"gi|2493543526|ref|XM_055376642.1| PREDICTED: Gorilla gorilla gorilla angiotensin converting enzyme 2 (ACE2), transcript variant X4, mRNA",3596,0.0,6543.0,1,3339
+"gi|2493543521|ref|XM_055376641.1| PREDICTED: Gorilla gorilla gorilla angiotensin converting enzyme 2 (ACE2), transcript variant X1, mRNA",3577,0.0,6543.0,1,3339
+"gi|2694562693|ref|XM_063634561.1| PREDICTED: Symphalangus syndactylus angiotensin converting enzyme 2 (ACE2), transcript variant X1, mRNA",3597,0.0,6403.0,1,3339
+"gi|2552960217|ref|XM_058441404.1| PREDICTED: Hylobates moloch angiotensin converting enzyme 2 (ACE2), mRNA",3523,0.0,6398.0,1,3339
+"gi|2464223790|ref|XM_054543949.1| PREDICTED: Pongo abelii angiotensin converting enzyme 2 (ACE2), transcript variant X1, mRNA",3770,0.0,6394.0,1,3339
+"gi|1743233336|ref|XM_003261084.3| PREDICTED: Nomascus leucogenys angiotensin I converting enzyme 2 (ACE2), mRNA",3593,0.0,6388.0,1,3339
+"gi|2463528935|ref|XM_054471966.1| PREDICTED: Pongo pygmaeus angiotensin converting enzyme 2 (ACE2), transcript variant X1, mRNA",3395,0.0,6384.0,1,3339
+"gi|402767149|ref|NM_001131132.2| Pongo abelii angiotensin converting enzyme 2 (ACE2), mRNA",3668,0.0,6379.0,1,3339
+gi|55725117|emb|CR857122.1| Pongo abelii mRNA; cDNA DKFZp469K2021 (from clone DKFZp469K2021),3669,0.0,6379.0,1,3339
+"gi|1220240516|ref|XM_021933040.1| PREDICTED: Papio anubis angiotensin I converting enzyme 2 (ACE2), transcript variant X1, mRNA",3650,0.0,6164.0,1,3339
+"gi|1411182783|ref|XM_025372062.1| PREDICTED: Theropithecus gelada angiotensin I converting enzyme 2 (ACE2), mRNA",3592,0.0,6164.0,1,3339
+"gi|1777353679|ref|XM_021933041.2| PREDICTED: Papio anubis angiotensin I converting enzyme 2 (ACE2), transcript variant X2, mRNA",3487,0.0,6164.0,1,3339
+"gi|2898873287|ref|XM_011735203.3| PREDICTED: Macaca nemestrina angiotensin converting enzyme 2 (LOC105478157), transcript variant X1, mRNA",4791,0.0,6134.0,1,3339
+"gi|2739348940|ref|XM_005593037.4| PREDICTED: Macaca fascicularis angiotensin converting enzyme 2 (ACE2), mRNA",3338,0.0,6134.0,1,3339
+"gi|795472188|ref|XM_012035810.1| PREDICTED: Cercocebus atys angiotensin I converting enzyme 2 (ACE2), transcript variant X3, mRNA",3414,0.0,6134.0,1,3339
+"gi|795472177|ref|XM_012035808.1| PREDICTED: Cercocebus atys angiotensin I converting enzyme 2 (ACE2), transcript variant X1, mRNA",3587,0.0,6134.0,1,3339
+"gi|795472182|ref|XM_012035809.1| PREDICTED: Cercocebus atys angiotensin I converting enzyme 2 (ACE2), transcript variant X2, mRNA",3625,0.0,6134.0,1,3339
+"gi|795472194|ref|XM_012035811.1| PREDICTED: Cercocebus atys angiotensin I converting enzyme 2 (ACE2), transcript variant X4, mRNA",3535,0.0,6134.0,1,3339
+"gi|2898873288|ref|XM_011735204.3| PREDICTED: Macaca nemestrina angiotensin converting enzyme 2 (LOC105478157), transcript variant X2, mRNA",4701,0.0,6134.0,1,3339
+"gi|1622969054|ref|XM_015126958.2| PREDICTED: Macaca mulatta angiotensin I converting enzyme 2 (ACE2), transcript variant X1, mRNA",3661,0.0,6129.0,1,3339
+"gi|1788698877|ref|XM_023199053.2| PREDICTED: Piliocolobus tephrosceles angiotensin I converting enzyme 2 (ACE2), mRNA",3595,0.0,6129.0,1,3339
+"gi|2309511222|ref|XM_050777627.1| PREDICTED: Macaca thibetana thibetana angiotensin converting enzyme 2 (ACE2), transcript variant X1, mRNA",3616,0.0,6119.0,1,3339
+"gi|2309511224|ref|XM_050777628.1| PREDICTED: Macaca thibetana thibetana angiotensin converting enzyme 2 (ACE2), transcript variant X2, mRNA",3427,0.0,6119.0,1,3339
+"gi|795225765|ref|XM_011995533.1| PREDICTED: Mandrillus leucophaeus angiotensin I converting enzyme 2 (ACE2), mRNA",3592,0.0,6119.0,1,3339
+"gi|1751287630|ref|XM_010366065.2| PREDICTED: Rhinopithecus roxellana angiotensin I converting enzyme 2 (ACE2), mRNA",3590,0.0,6114.0,1,3339
+"gi|2954819339|ref|XM_037986357.2| PREDICTED: Chlorocebus sabaeus angiotensin converting enzyme 2 (ACE2), mRNA",3422,0.0,6089.0,1,3339
+"gi|1825945345|ref|XM_033200918.1| PREDICTED: Trachypithecus francoisi angiotensin I converting enzyme 2 (ACE2), mRNA",3557,0.0,6053.0,1,3339
+"gi|1622969056|ref|XM_028841825.1| PREDICTED: Macaca mulatta angiotensin I converting enzyme 2 (ACE2), transcript variant X2, mRNA",3565,0.0,6047.0,42,3339
+"gi|2309511226|ref|XM_050777629.1| PREDICTED: Macaca thibetana thibetana angiotensin converting enzyme 2 (ACE2), transcript variant X3, mRNA",3519,0.0,6042.0,42,3339
+"gi|1059175446|ref|XM_017888581.1| PREDICTED: Rhinopithecus bieti angiotensin I converting enzyme 2 (ACE2), transcript variant X2, mRNA",3093,0.0,5649.0,241,3339
+"gi|1984069662|ref|XM_010336623.2| PREDICTED: Saimiri boliviensis boliviensis angiotensin converting enzyme 2 (ACE2), transcript variant X1, mRNA",3455,0.0,5638.0,1,3332
+"gi|1804372246|ref|XM_032285963.1| PREDICTED: Sapajus apella angiotensin I converting enzyme 2 (ACE2), transcript variant X1, mRNA",3451,0.0,5637.0,1,3332
+"gi|1059175444|ref|XM_017888580.1| PREDICTED: Rhinopithecus bieti angiotensin I converting enzyme 2 (ACE2), transcript variant X1, mRNA",3090,0.0,5622.0,241,3339
+"gi|1934007973|ref|XM_017512376.2| PREDICTED: Cebus imitator angiotensin I converting enzyme 2 (ACE2), transcript variant X1, mRNA",3415,0.0,5618.0,1,3332
+"gi|2715661566|ref|XM_012434682.3| PREDICTED: Aotus nancymaae angiotensin converting enzyme 2 (ACE2), mRNA",3496,0.0,5573.0,2,3339

@@ -219,7 +219,6 @@ def get_accession(system_prompt, user_prompt):
     return accession.choices[0].message.content
 
 
-@st.cache_data
 def fetch_sequence(accession_no,
                    db='nucleotide',
                    rettype='gb',
@@ -239,10 +238,9 @@ def fetch_sequence(accession_no,
         print(record.description)
 
     handle.close()
-    return record
+    return record, handle
 
 
-@st.cache_data
 def nucleotide_blast(sequence, database='nt', entrez_query=None):
 
     try:
@@ -264,6 +262,7 @@ def process_stream(stream, save=True, save_name='BLAST_results'):
     """
     Function to process a stream object into a dataframe and save it as a .csv file.
 
+    Future: Add a directory argument to save the results somewhere
     """
 
     record = NCBIXML.parse(stream)
