@@ -21,19 +21,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import OpenAIEmbeddings
 
 
-"""
-
-Classes - all of the strings are commented out here because they're being displayed on the streamlit UI if not
-
-    These will be a lot more flexible in the future, right now I just wanted to make sure I could write these classes so that they would work. Next I need to fine-tune.
-
-"""
-
-
 class Draft:
-
-    # drafts a preliminary response to the user prompt
-
     def __init__(self,
                  max_tokens=None,
                  temperature=None,
@@ -91,9 +79,6 @@ class Draft:
 
 
 class Critique:
-
-    # cri
-
     def __init__(self,
                  response,
                  user_prompt=None,
@@ -141,7 +126,7 @@ class Critique:
         return critique.content
 
 
-class Report():
+class Report:
     def __init__(self, draft, critique, max_tokens=None, temperature=None, model=None, provider=None):
         self.draft = draft          # output of Draft
         self.critique = critique    # output of Critique
@@ -172,16 +157,9 @@ class Report():
         return report.content
 
 
-
-# """
-#
-# Functions
-#
-# """
-
-
-@st.cache_data
-def get_accession(system_prompt, user_prompt):
+def get_accession(system_prompt, user_prompt,
+                  critique_system_prompt='You are an expert on accesion number formating for the NCBI database.',
+                  critique_user_prompt='Please evaluate the accuracy of the  and provide feedback, including the correct accession ID if applicable.', report_system_prompt='', report_user_prompt=''):
     """
     Function to use LLM to get accession number using Draft, Critique, and Response classes
     :return:
