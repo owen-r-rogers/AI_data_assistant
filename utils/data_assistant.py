@@ -28,19 +28,7 @@ accession_input = st.text_input('Enter NCBI accession number')
 st.write(f'You entered {accession_input}')
 
 
-# """
-#
-# Classes - all of the strings are commented out here because they're being displayed on the streamlit UI if not
-#
-#     These will be a lot more flexible in the future, right now I just wanted to make sure I could write these classes so that they would work. Next I need to fine-tune.
-#
-# """
-
-
 class Draft:
-
-    # drafts a preliminary response to the user prompt
-
     def __init__(self,
                  max_tokens=None,
                  temperature=None,
@@ -179,15 +167,6 @@ class Report():
         return report.content
 
 
-
-# """
-#
-# Functions
-#
-# """
-
-
-@st.cache_data
 def get_accession(system_prompt, user_prompt):
     """
     Function to use LLM to get accession number using Draft, Critique, and Response classes
@@ -231,7 +210,6 @@ def get_accession(system_prompt, user_prompt):
     return accession.choices[0].message.content
 
 
-@st.cache_data
 def fetch_sequence(accession_no,
                    db='nucleotide',
                    rettype='gb',
@@ -254,7 +232,6 @@ def fetch_sequence(accession_no,
     return record
 
 
-@st.cache_data
 def nucleotide_blast(sequence, database='nt', entrez_query=None):
 
     try:
@@ -301,17 +278,6 @@ def process_stream(stream, save=True, save_name='BLAST_results'):
         df.to_csv(f'{save_name}.csv', index=False)
 
     return df
-
-
-
-# """
-# Future (immediate) steps:
-#
-#     RAG with paper about BLAST and sequence-based drug design
-#     Make a function to color the structure of a target by therapeutic targeting
-#         BONUS: make this something that I can spin around in a window in streamlit
-#
-# """
 
 
 if prompt:
