@@ -5,23 +5,42 @@ import matplotlib.pyplot as plt
 import openai
 import streamlit as st
 import datetime
-
 from dotenv import load_dotenv
-
 from Bio import Blast
 from Bio import Entrez
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
 from Bio import SeqIO
-
 from openai import OpenAI
-
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import OpenAIEmbeddings
+
+
+# set page config
+st.set_page_config(page_title='AI assistant for biomedical data', layout='wide')
+st.title('Automated clustering and analysis of BLAST search')
+
+# Create a box at the bottom of the page for input
+prompt = st.chat_input('Ask a question')
+
+# Create another box for inputting the accesion number
+accession_input = st.text_input('Enter NCBI accession number')
+st.write(f'You entered {accession_input}')
+
+
+# """
+#
+# Classes - all of the strings are commented out here because they're being displayed on the streamlit UI if not
+#
+#     These will be a lot more flexible in the future, right now I just wanted to make sure I could write these classes so that they would work. Next I need to fine-tune.
+#
+# """
 
 
 class Draft:
+
+    # drafts a preliminary response to the user prompt
+
     def __init__(self,
                  max_tokens=None,
                  temperature=None,
@@ -79,6 +98,9 @@ class Draft:
 
 
 class Critique:
+
+    # cri
+
     def __init__(self,
                  response,
                  user_prompt=None,
@@ -126,7 +148,7 @@ class Critique:
         return critique.content
 
 
-class Report:
+class Report():
     def __init__(self, draft, critique, max_tokens=None, temperature=None, model=None, provider=None):
         self.draft = draft          # output of Draft
         self.critique = critique    # output of Critique
@@ -157,9 +179,16 @@ class Report:
         return report.content
 
 
-def get_accession(system_prompt, user_prompt,
-                  critique_system_prompt='You are an expert on accesion number formating for the NCBI database.',
-                  critique_user_prompt='Please evaluate the accuracy of the  and provide feedback, including the correct accession ID if applicable.', report_system_prompt='', report_user_prompt=''):
+
+# """
+#
+# Functions
+#
+# """
+
+
+@st.cache_data
+def get_accession(system_prompt, user_prompt):
     """
     Function to use LLM to get accession number using Draft, Critique, and Response classes
     :return:
@@ -202,6 +231,7 @@ def get_accession(system_prompt, user_prompt,
     return accession.choices[0].message.content
 
 
+@st.cache_data
 def fetch_sequence(accession_no,
                    db='nucleotide',
                    rettype='gb',
@@ -221,9 +251,10 @@ def fetch_sequence(accession_no,
         print(record.description)
 
     handle.close()
-    return record, handle
+    return record
 
 
+@st.cache_data
 def nucleotide_blast(sequence, database='nt', entrez_query=None):
 
     try:
@@ -245,7 +276,6 @@ def process_stream(stream, save=True, save_name='BLAST_results'):
     """
     Function to process a stream object into a dataframe and save it as a .csv file.
 
-    Future: Add a directory argument to save the results somewhere
     """
 
     record = NCBIXML.parse(stream)
@@ -274,33 +304,21 @@ def process_stream(stream, save=True, save_name='BLAST_results'):
 
 
 
-"""
-Future (immediate) steps:
+# """
+# Future (immediate) steps:
+#
+#     RAG with paper about BLAST and sequence-based drug design
+#     Make a function to color the structure of a target by therapeutic targeting
+#         BONUS: make this something that I can spin around in a window in streamlit
+#
+# """
 
-    RAG with paper about BLAST and sequence-based drug design
-    Make a function to color the structure of a target by therapeutic targeting
-        BONUS: make this something that I can spin around in a window in streamlit
 
-"""
+if prompt:
+    accession = get_accession('You are an expert in telling people NCBI accession codes.', prompt)
+    st.write(f"Predicted accession number: {accession}")
 
-
-if __name__ == "__main__":
-    # set page config
-    st.set_page_config(page_title='AI assistant for biomedical data', layout='wide')
-    st.title('Automated clustering and analysis of BLAST search')
-
-    # Create a box at the bottom of the page for input
-    prompt = st.chat_input('Ask a question')
-
-    # Create another box for inputting the accession number
-    accession_input = st.text_input('Enter NCBI accession number')
-    st.write(f'You entered {accession_input}')
-
-    if prompt:
-        accession = get_accession('You are an expert in telling people NCBI accession codes.', prompt)
-        st.write(f"Predicted accession number: {accession}")
-
-    if accession_input:
-        handle = nucleotide_blast(accession_input)
-        blast_results = process_stream(handle, save=False)
-        st.write(blast_results)
+if accession_input:
+    handle = nucleotide_blast(accession_input)
+    blast_results = process_stream(handle, save=False)
+    st.write(blast_results)
