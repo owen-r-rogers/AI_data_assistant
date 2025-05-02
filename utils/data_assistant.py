@@ -24,7 +24,7 @@ st.title('Automated clustering and analysis of BLAST search')
 prompt = st.chat_input('Ask a question')
 
 # Create another box for inputting the accesion number
-accession_input = st.text_input('Enter NCBI accession number')
+accession_input = st.text_input('Enter NCBI accession number.')
 st.write(f'You entered {accession_input}')
 
 
