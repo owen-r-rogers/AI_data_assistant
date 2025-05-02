@@ -2,9 +2,11 @@ import sys
 import os
 
 import langchain.document_loaders
+
 import langchain_community.vectorstores
 import langchain_openai
 
+from langchain_community.document_loaders import PyMuPDFLoader
 from utils.data_assistant_utils import *
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -12,7 +14,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # RAG pipeline
 
 # load and embed documents
-load = langchain.document_loaders.TextLoader()
+pdf_path = '/Users/owenrogers/Desktop/projects/github/school/AI_data_assistant/RAG'
+pdf_loader = PyMuPDFLoader(pdf_path)
+pdf_docs = pdf_loader.load()
 
 
 
