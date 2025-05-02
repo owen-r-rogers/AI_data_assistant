@@ -17,274 +17,30 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 
 # Streamlit
-st.set_page_config(page_title='AI assistant for biomedical data', layout='wide')
+st.set_page_config(page_title='data_assistant.py', layout='wide')
 st.title('Automated clustering and analysis of BLAST search')
+
+ncbi_acc_known = st.checkbox('I know the accession number I want to BLAST.')
+
+if ncbi_acc_known:
+    accession_input = st.text_input('Enter an NCBI accession number.')
+    st.write(f'You entered {accession_input}')
+
+    handle = nucleotide_blast(accession_input)
+    blast_results = process_stream(handle, save=False)
+    st.write(blast_results)
+else:
+    ask_for_acc = st.text_input('')
 
 # Create a box at the bottom of the page for input
 prompt = st.chat_input('Ask a question')
 
-# Create another box for inputting the accesion number
-accession_input = st.text_input('Enter NCBI accession number.')
-st.write(f'You entered {accession_input}')
 
 
-class Draft:
-    def __init__(self,
-                 max_tokens=None,
-                 temperature=None,
-                 model='gpt-4o-mini',
-                 provider='openai'):
 
-        # load openAI API key
-        load_dotenv()
-        self.openai_api_key = os.getenv("OPENAI_API_KEY")
-        openai.api_key = self.openai_api_key
-
-        # initialize parameters for the openai prompt
-        self.max_tokens = max_tokens if max_tokens is not None else 100
-        self.temperature = temperature if temperature is not None else 0.7
-        self.model = model if model is not None else "gpt-4o-mini"
-        self.provider = provider if provider is not None else "openai"
-        self.langchain_model = None
-
-    def assign_tokens(self, tokens):
-        self.max_tokens = tokens
-
-    def assign_temperature(self, temperature):
-        self.temperature = temperature
-
-    def assign_model(self, model):
-        self.model = model
-
-    def assign_provider(self, provider):
-        self.provider = provider
-
-    def prime(self):
-        # ititialize the langchain model after specifying parameters
-
-        self.langchain_model = init_chat_model(self.model,
-                                               model_provider=self.provider,
-                                               temperature=self.temperature,
-                                               max_tokens=self.max_tokens)
-
-    def generate(self, system_prompt, user_prompt):
-        # generate the response
-
-        if self.langchain_model is None:
-            self.prime()
-
-        # create a prompt
-        messages = [
-            SystemMessage(system_prompt),
-            HumanMessage(user_prompt),
-        ]
-
-        # generate the response
-        message = self.langchain_model.invoke(messages)
-
-        return message.content
-
-
-class Critique:
-
-    # cri
-
-    def __init__(self,
-                 response,
-                 user_prompt=None,
-                 max_tokens=None,
-                 temperature=None,
-                 model=None):
-
-        # load openAI API key
-        load_dotenv()
-        self.openai_api_key = os.getenv("OPENAI_API_KEY")
-        openai.api_key = self.openai_api_key
-
-
-        # take in the response from the Draft()
-        self.response = response
-        self.user_prompt = user_prompt if user_prompt is not None else f'Evaluate the accuracy of: "{response}"'
-        self.max_tokens = max_tokens if max_tokens is not None else 100
-        self.temperature = temperature if temperature is not None else 0.7
-        self.model = model if model is not None else "gpt-4o-mini"
-        self.langchain_model = None
-
-    def prime(self):
-        self.langchain_model = init_chat_model(
-            self.model,
-            model_provider='openai',
-            temperature=self.temperature,
-            max_tokens=self.max_tokens
-        )
-
-
-    def generate(self, system_prompt, user_prompt):
-
-        if self.langchain_model is None:
-            self.prime()
-
-        # create a prompt
-        messages = [
-            SystemMessage(system_prompt),
-            HumanMessage(user_prompt)
-        ]
-
-        # generate the response
-        critique = self.langchain_model.invoke(messages)
-
-        return critique.content
-
-
-class Report():
-    def __init__(self, draft, critique, max_tokens=None, temperature=None, model=None, provider=None):
-        self.draft = draft          # output of Draft
-        self.critique = critique    # output of Critique
-        self.max_tokens = max_tokens if max_tokens is not None else 100
-        self.temperature = temperature if temperature is not None else 0.7
-        self.model = model if model is not None else "gpt-4o-mini"
-        self.provider = provider if provider is not None else "openai"
-        self.langchain_model = None
-
-    def prime(self):
-        self.langchain_model = init_chat_model(self.model, model_provider=self.provider, temperature=self.temperature, max_tokens=self.max_tokens)
-
-    def report(self, user_prompt=None, system_prompt=None):
-
-        if self.langchain_model is None:
-            self.prime()
-
-        user_prompt = user_prompt if user_prompt is not None else f'Can you give me a final answer integrating these two responses: "{self.draft}", and the critique of that draft: "{self.critique}" '
-        system_prompt = system_prompt if system_prompt is not None else f'You are an AI agent that generates a response integrating the draft: {self.draft} and the critique of that draft: {self.critique}.'
-
-        messages = [
-            SystemMessage(system_prompt),
-            HumanMessage(user_prompt)
-        ]
-
-        report = self.langchain_model.invoke(messages)
-
-        return report.content
-
-
-def get_accession(system_prompt, user_prompt):
-    """
-    Function to use LLM to get accession number using Draft, Critique, and Response classes
-    :return:
-    """
-
-    # load OpenAI API key
-    try:
-        load_dotenv()
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-    except Exception as e:
-        print(e)
-
-    # initialize Draft
-    draft = Draft(max_tokens=600, temperature=0.7)
-    draft.prime()
-    guess = draft.generate(system_prompt, user_prompt)
-
-    # initialize Critique
-    critique = Critique(guess)
-    critique.prime()
-    critique_sp = 'You are an expert on accesion number formating for the NCBI database.'
-    critique_up = f'Please evaluate the accuracy of {guess} and provide feedback, including the correct accession ID if applicable.'
-    evaluation = critique.generate(critique_sp, critique_up)
-
-    # initialize report
-    report = Report(guess, evaluation)
-    report_sp = 'You are the final reporter for taking in an initial guess and a criticial evaluation.md of that guess, reporting the final correct answer to the user.'
-    report_up = f'Please integrate the critique: "{evaluation}", of the initial guess: "{guess}".'
-    final_report = report.report(user_prompt=report_up, system_prompt=report_sp)
-
-    # report only the accesion number
-    prompt = f'Can you take this string and return ONLY the NCBI accession number, if it is deemed correct by the model: {final_report}. Again, ONLY return a string of the NCBI accession number.'
-    accession = openai.chat.completions.create(
-        model='gpt-3.5-turbo',
-        messages=[{'role': 'user', 'content': prompt}],
-        temperature=0.1,
-        max_tokens=100
-    )
-
-    return accession.choices[0].message.content
-
-
-def fetch_sequence(accession_no,
-                   db='nucleotide',
-                   rettype='gb',
-                   retmode='text',
-                   email='your_email_here',
-                   verbose=True):
-
-    Entrez.email = email
-    handle = Entrez.efetch(db=db, id=accession_no, rettype=rettype, retmode=retmode)
-
-    record = SeqIO.read(handle, rettype if rettype != 'gb' else 'genbank')
-
-    if verbose:
-        print(f'The sequence in {rettype.upper()} format for ID {record.id}:')
-        print(record.seq[:50])
-        print('')
-        print(record.description)
-
-    handle.close()
-    return record
-
-
-def nucleotide_blast(sequence, database='nt', entrez_query=None):
-
-    try:
-        # Perform BLAST search
-
-        if entrez_query is not None:
-            result_handle = NCBIWWW.qblast('blastn', database, sequence, entrez_query=entrez_query)
-        else:
-            result_handle = NCBIWWW.qblast('blastn', database, sequence)
-
-        return result_handle
-
-    except Exception as e:
-        print(f"An error occurred during BLAST search: {e}")
-        return None
-
-
-def process_stream(stream, save=True, save_name='BLAST_results'):
-    """
-    Function to process a stream object into a dataframe and save it as a .csv file.
-
-    """
-
-    record = NCBIXML.parse(stream)
-
-    rows = []
-
-    for br in record:
-        for al in br.alignments:
-            hsp = al.hsps[0]
-            row = {
-                'title': al.title,
-                'length': al.length,
-                'e_value': hsp.expect,
-                'score': hsp.score,
-                'query_start': hsp.query_start,
-                'query_end': hsp.query_end
-            }
-            rows.append(row)
-
-    df = pd.DataFrame(rows)
-
-    if save:
-        df.to_csv(f'{save_name}.csv', index=False)
-
-    return df
 
 
 if prompt:
     accession = get_accession('You are an expert in telling people NCBI accession codes.', prompt)
     st.write(f"Predicted accession number: {accession}")
 
-if accession_input:
-    handle = nucleotide_blast(accession_input)
-    blast_results = process_stream(handle, save=False)
-    st.write(blast_results)
