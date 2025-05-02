@@ -24,8 +24,10 @@ if ncbi_acc_unknown:
     inq_input = st.text_input('What accession number are you interested in finding?')
 
     if inq_input:
-        acc = get_accession(system_prompt='You are an expert in the NCBI accession number formatting',
+        acc = get_accession(system_prompt='You are an expert in the NCBI accession number formatting, and you take the specimen of interest from the user prompt and search through publicly available databases to find the corresponding NCBI accession number, with an emphasis on finding mRNA and DNA sequences.',
                             user_prompt=inq_input)
 
+        st.write('Retrieving the NCBI accession number for your inquery.')
+        st.write(f'The accession number for your prompt - {inq_input} - is:')
         st.write(acc)
     
