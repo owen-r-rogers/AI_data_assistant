@@ -1,22 +1,6 @@
-import os
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import openai
-import streamlit as st
-import datetime
-from dotenv import load_dotenv
-from Bio import Blast
-from Bio import Entrez
-from Bio.Blast import NCBIWWW
-from Bio.Blast import NCBIXML
-from Bio import SeqIO
-from openai import OpenAI
-from langchain.chat_models import init_chat_model
-from langchain_core.messages import HumanMessage, SystemMessage
+from utils.data_assistant_utils import *
 
 
-# Streamlit
 st.set_page_config(page_title='data_assistant.py', layout='wide')
 st.title('Automated clustering and analysis of BLAST search')
 
@@ -29,15 +13,9 @@ if ncbi_acc_known:
     handle = nucleotide_blast(accession_input)
     blast_results = process_stream(handle, save=False)
     st.write(blast_results)
-else:
-    ask_for_acc = st.text_input('')
 
 # Create a box at the bottom of the page for input
 prompt = st.chat_input('Ask a question')
-
-
-
-
 
 
 if prompt:
