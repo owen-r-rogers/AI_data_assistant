@@ -37,3 +37,11 @@ blast_result = nucleotide_blast(sequence)
 # process it into a dataframe
 df = process_stream(blast_result, save=True, save_name='BLAST_results')
 ```
+
+### 2May - RAG pipeline
+I used the following articles to create a vector store for RAG:  
+https://www.nature.com/articles/s41579-024-01036-y  
+https://arxiv.org/abs/2306.15006  
+https://www.biorxiv.org/content/10.1101/2024.04.30.591806v1  
+https://www.nature.com/articles/s41467-023-39856-w  
+https://jcheminf.biomedcentral.com/articles/10.1186/s13321-024-00852-x  
