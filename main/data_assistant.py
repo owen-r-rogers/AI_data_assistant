@@ -1,8 +1,19 @@
 import sys
 import os
+
+import langchain.document_loaders
+import langchain_community.vectorstores
+import langchain_openai
+
 from utils.data_assistant_utils import *
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# RAG pipeline
+
+# load and embed documents
+load = langchain.document_loaders.TextLoader()
+
 
 
 st.set_page_config(page_title='data_assistant.py', layout='wide')
@@ -30,4 +41,3 @@ if ncbi_acc_unknown:
         st.write('Retrieving the NCBI accession number for your inquery.')
         st.write(f'The accession number for your prompt - {inq_input} - is:')
         st.write(acc)
-    
