@@ -16,7 +16,7 @@ from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage
 
 
-# set page config
+# Streamlit
 st.set_page_config(page_title='AI assistant for biomedical data', layout='wide')
 st.title('Automated clustering and analysis of BLAST search')
 
