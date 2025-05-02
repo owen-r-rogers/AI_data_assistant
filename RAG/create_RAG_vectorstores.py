@@ -23,41 +23,27 @@ splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 embedding_model = OpenAIEmbeddings()
 
 
-# Embed the contents of each file
+# collect all split documents
+all_split_docs = []
+
+
 for file in files:
-
-    file_name = file.split('.')[0]
-
-    # read and load pdf file in
     pdf_loader = PyMuPDFLoader(os.path.join(os.getcwd(), file))
     pdf_doc = pdf_loader.load()
-
-    # split documents
-    split_docs = splitter.split_documents(pdf_doc)
-
-    # create vector store
-    vectorstore = FAISS.from_documents(pdf_doc, embedding=embedding_model)
-
-    # save vectorstore and metadata
-    vectorstore.save_local(f'./vectorstore/faiss_index/{file_name}')
-    with open(f'./vectorstore/faiss_index/{file_name}.pkl', 'wb') as f:
-        pickle.dump(vectorstore, f)
-
-    # get the FAISS index object
-    faiss_index = vectorstore.index
-
-    # save embeddings to a numpy array
-    vectors = faiss_index.reconstruct_n(0, faiss_index.ntotal)
-    np.save(f'vectorstore/rag_embeddings_{file_name}.npy', vectors)
-
-    # add a reference section from documents to the vector store
-    ids = vectorstore.add_documents(documents=pdf_doc)
+    split_doc = splitter.split_documents(pdf_doc)
+    all_split_docs.extend(split_doc)
 
 
+# create one FAISS vector store from all documents
+vectorstore = FAISS.from_documents(all_split_docs, embedding=embedding_model)
 
 
+# save results
+os.makedirs('vectorstore/faiss_index', exist_ok=True)
+vectorstore.save_local('vectorstore/faiss_index')
 
 
-
-
-
+# save raw numpy embeddings
+faiss_index = vectorstore.index
+vectors = faiss_index.reconstruct_n(0, faiss_index.ntotal)
+np.save(os.path.join('vectorstore/faiss_index', 'rag_embeddings.npy'), vectors)
