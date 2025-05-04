@@ -262,8 +262,35 @@ def process_stream(stream, save=True, save_name='BLAST_results'):
 
     df = pd.DataFrame(rows)
 
+    df['title'] = df['title'].apply(lambda x: x.split('|')[3])
+
+    # create and fill a dictionary stroing accession numbers, sequence, and summary for clustering
+    blast_accessions = {'title': [],
+                        'sequence': [],
+                        'summary': []}
+
+    for record in df['title']:
+
+        blast_accessions['title'].append(record)
+
+        rec, _ = fetch_sequence(record, email='orogers@wesleyan.edu')
+        blast_accessions['sequence'].append(rec.seq)
+
+        try:
+            blast_accessions['summary'].append(rec.annotations['comment'])
+
+        except:
+
+            print(f'Accession number {record} does not have a summary')
+            blast_accessions['summary'].append(f'There is no summary provided for accession no. {record}')
+
+    ext_df = pd.DataFrame(blast_accessions)
+
+    assert (ext_df['title'].values == df['title'].values).all(), 'Something went wrong in the way you generated the dictionary'
+
+    all_data = ext_df.merge(df, 'left', on='title')
+
     if save:
-        df.to_csv(f'{save_name}.csv', index=False)
+        all_data.to_csv(f'{save_name}.csv', index=False)
 
-    return df
-
+    return all_data
