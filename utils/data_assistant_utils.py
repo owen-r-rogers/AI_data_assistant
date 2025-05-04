@@ -273,7 +273,7 @@ def process_stream(stream, save=True, save_name='BLAST_results'):
 
         blast_accessions['title'].append(record)
 
-        rec, _ = fetch_sequence(record, email='orogers@wesleyan.edu')
+        rec = fetch_sequence(record, email='orogers@wesleyan.edu')
         blast_accessions['sequence'].append(rec.seq)
 
         try:
