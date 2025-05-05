@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import openai
 import streamlit as st
+import seaborn as sns
 import datetime
 from dotenv import load_dotenv
 from Bio import Blast
@@ -20,6 +21,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains.retrieval import create_retrieval_chain
 
+from sklearn.manifold import TSNE
 
 class Draft:
     def __init__(self,
@@ -348,6 +350,40 @@ def prepare_for_embedding(processed_stream):
     embedded_seqs = batch_embed(documents)
 
     df = pd.DataFrame(embedded_seqs)
+    assert len(df) == len(processed_stream), 'The two dataframes are not equal in length'
+    df['title'] = processed_stream['title']
 
     return df
+
+
+def plot_tsne(df):
+    """
+    Take output of prepare_for_embedding() and plot t-SNE
+    """
+
+    matrix = df.values
+
+    tsne = TSNE(n_components=2, perplexity=15, random_state=42, init='random', learning_rate='auto')
+
+    vis_dims = tsne.fit_transform(matrix)
+
+    x = [x for x, y in vis_dims]
+    y = [y for x, y in vis_dims]
+
+    # create plot
+    fig, ax = plt.subplots(figsize=(8, 8))
+    sns.scatterplot(x=x, y=y, ax=ax, s=200, alpha=0.6, color='red', marker='o', edgecolor='black')
+
+    ax.set_xlabel('Dimension 1', fontsize=16)
+    ax.set_ylabel('Dimension 2', fontsize=16)
+    ax.set_title('t-SNE embeddings', fontsize=28)
+
+    ax.spines['top'].set_linewidth(2)
+    ax.spines['top'].set_color('black')
+    ax.spines['right'].set_linewidth(2)
+    ax.spines['right'].set_color('black')
+    ax.spines['left'].set_linewidth(2)
+    ax.spines['left'].set_color('black')
+    ax.spines['bottom'].set_linewidth(2)
+    ax.spines['bottom'].set_color('black')
 
