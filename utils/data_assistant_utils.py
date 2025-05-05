@@ -157,8 +157,7 @@ class Report():
 
 def get_accession(system_prompt, user_prompt):
     """
-    Function to use LLM to get accession number using Draft, Critique, and Response classes
-    :return:
+    Expand functinoality to make it more generalizable. Include arguments for up and sp for all classes.
     """
 
     # load OpenAI API key
