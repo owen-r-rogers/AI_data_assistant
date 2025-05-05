@@ -97,3 +97,4 @@ target/
 
 # exclude data from source control by default
 # /data/
+main/4May.csv
