@@ -7,9 +7,10 @@ import langchain_community.vectorstores
 import langchain_openai
 
 from langchain_community.document_loaders import PyMuPDFLoader
-from utils.data_assistant_utils import *
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.data_assistant_utils import *
+
 
 # RAG pipeline
 
