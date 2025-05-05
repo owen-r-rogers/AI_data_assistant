@@ -24,12 +24,13 @@ if ncbi_acc_known:
     if accession_input:
 
         # insert slider for how many hits to display
-        hit_numbers = st.slider('Select a range of hit values to return', 50, 500, 200)
+        set_hitsize = st.text_input('Enter how many hits to return')
 
-        if hit_numbers:
+        if set_hitsize:
+            hits = st.number_input('Hits', min_value=10, max_value=1000, value=50)
 
             st.write(f'You entered {accession_input}')
-            handle = nucleotide_blast(accession_input, hitlist_size=hit_numbers)
+            handle = nucleotide_blast(accession_input, hitlist_size=hits)
             blast_results = process_stream(handle, save=False)
             st.write(blast_results)
 
