@@ -15,6 +15,11 @@ from openai import OpenAI
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage
 
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain.prompts import ChatPromptTemplate
+from langchain.chains.retrieval import create_retrieval_chain
+
 
 class Draft:
     def __init__(self,
@@ -219,15 +224,15 @@ def fetch_sequence(accession_no,
     return record
 
 
-def nucleotide_blast(sequence, database='nt', entrez_query=None):
+def nucleotide_blast(sequence, database='nt', hitlist_size=50, entrez_query=None):
 
     try:
         # Perform BLAST search
 
         if entrez_query is not None:
-            result_handle = NCBIWWW.qblast('blastn', database, sequence, entrez_query=entrez_query)
+            result_handle = NCBIWWW.qblast('blastn', database, sequence, hitlist_size=hitlist_size,entrez_query=entrez_query)
         else:
-            result_handle = NCBIWWW.qblast('blastn', database, sequence)
+            result_handle = NCBIWWW.qblast('blastn', database, sequence,hitlist_size=hitlist_size)
 
         return result_handle
 
