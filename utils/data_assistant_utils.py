@@ -47,7 +47,8 @@ class Draft:
 
         # initialize RAG retriever
         self.vectorstore = FAISS.load_local('/Users/owenrogers/Desktop/projects/github/school/AI_data_assistant/RAG/vectorstore/faiss_index',
-                                            embeddings=OpenAIEmbeddings(model=embedding_model))
+                                            embeddings=OpenAIEmbeddings(model=embedding_model),
+                                            allow_dangerous_deserialization=True)
 
     def assign_tokens(self, tokens):
         self.max_tokens = tokens
