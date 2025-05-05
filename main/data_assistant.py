@@ -12,15 +12,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.data_assistant_utils import *
 
 
-# RAG pipeline
-
-# load and embed documents
-pdf_path = '/Users/owenrogers/Desktop/projects/github/school/AI_data_assistant/RAG'
-pdf_loader = PyMuPDFLoader(pdf_path)
-pdf_docs = pdf_loader.load()
-
-
-
 st.set_page_config(page_title='data_assistant.py', layout='wide')
 st.title('Automated clustering and analysis of BLAST search')
 
@@ -40,7 +31,7 @@ if ncbi_acc_unknown:
     inq_input = st.text_input('What accession number are you interested in finding?')
 
     if inq_input:
-        acc = get_accession(system_prompt='You are an expert in the NCBI accession number formatting, and you take the specimen of interest from the user prompt and search through publicly available databases to find the corresponding NCBI accession number, with an emphasis on finding mRNA and DNA sequences.',
+        acc = ask_ai(system_prompt='You are an expert in the NCBI accession number formatting, and you take the specimen of interest from the user prompt and search through publicly available databases to find the corresponding NCBI accession number, with an emphasis on finding mRNA and DNA sequences.',
                             user_prompt=inq_input)
 
         st.write('Retrieving the NCBI accession number for your inquery.')
