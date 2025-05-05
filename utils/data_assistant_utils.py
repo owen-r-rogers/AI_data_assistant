@@ -26,7 +26,9 @@ class Draft:
                  max_tokens=None,
                  temperature=None,
                  model='gpt-4o-mini',
-                 provider='openai'):
+                 embedding_model='text-embedding-ada-002',
+                 provider='openai',
+                 rag=True):
 
         # load openAI API key
         load_dotenv()
@@ -39,6 +41,11 @@ class Draft:
         self.model = model if model is not None else "gpt-4o-mini"
         self.provider = provider if provider is not None else "openai"
         self.langchain_model = None
+        self.embedding_model = embedding_model
+
+        # initialize RAG retriever
+        self.vectorstore = FAISS.load_local('/Users/owenrogers/Desktop/projects/github/school/AI_data_assistant/RAG/vectorstore/faiss_index',
+                                            embeddings=OpenAIEmbeddings(model=embedding_model))
 
     def assign_tokens(self, tokens):
         self.max_tokens = tokens
@@ -298,3 +305,49 @@ def process_stream(stream, save=True, save_name='BLAST_results'):
         all_data.to_csv(f'{save_name}.csv', index=False)
 
     return all_data
+
+
+def batch_embed(documents, batch_size=20, delay=1.0, model='text-embedding-ada-002'):
+    import time
+
+    embeddings = OpenAIEmbeddings(
+        model=model
+    )
+
+    results = []
+
+    for i in range(0, len(documents), batch_size):
+        chunk = documents[i:i + batch_size]
+
+        try:
+            vectors = embeddings.embed_documents(chunk)
+            results.extend(vectors)
+
+            print(f'Successfully embedded and stored chunk {i}')
+
+        except Exception as e:
+            print(e)
+
+        time.sleep(delay)
+
+    return results
+
+
+def prepare_for_embedding(processed_stream):
+
+    # process data from processed_stream df that will be necessary for embedding
+    for_clustering = processed_stream[['title', 'sequence', 'summary', 'e_value', 'score']]
+    for_clustering.loc[:, 'sequence'] = for_clustering['sequence'].apply(lambda x: str(x))
+    for_clustering.loc[:, 'text'] = for_clustering.loc[:, 'summary'] + ' ' + for_clustering.loc[:, 'sequence']
+    for_clustering = for_clustering[['text']]
+
+    # create a list of lists for embedding
+    documents = for_clustering['text'].tolist()
+
+    # batch embed
+    embedded_seqs = batch_embed(documents)
+
+    df = pd.DataFrame(embedded_seqs)
+
+    return df
+
