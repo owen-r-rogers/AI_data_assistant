@@ -22,10 +22,16 @@ if ncbi_acc_known:
     accession_input = st.text_input('Enter an NCBI accession number.')
 
     if accession_input:
-        st.write(f'You entered {accession_input}')
-        handle = nucleotide_blast(accession_input)
-        blast_results = process_stream(handle, save=False)
-        st.write(blast_results)
+
+        # insert slider for how many hits to display
+        hit_numbers = st.slider('Select a range of hit values to return', 50, 500, 200)
+
+        if hit_numbers:
+
+            st.write(f'You entered {accession_input}')
+            handle = nucleotide_blast(accession_input, hitlist_size=hit_numbers)
+            blast_results = process_stream(handle, save=False)
+            st.write(blast_results)
 
 if ncbi_acc_unknown:
     inq_input = st.text_input('What accession number are you interested in finding?')
