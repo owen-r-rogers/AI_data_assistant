@@ -155,7 +155,7 @@ class Report():
         return report.content
 
 
-def get_accession(system_prompt, user_prompt):
+def ask_ai(system_prompt, user_prompt):
     """
     Expand functinoality to make it more generalizable. Include arguments for up and sp for all classes.
     """
