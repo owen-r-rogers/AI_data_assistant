@@ -234,6 +234,7 @@ def fetch_sequence(accession_no,
     return record
 
 
+@st.cache_data(show_spinner='Running BLAST')
 def nucleotide_blast(sequence, database='nt', hitlist_size=50, entrez_query=None):
 
     try:
@@ -251,6 +252,7 @@ def nucleotide_blast(sequence, database='nt', hitlist_size=50, entrez_query=None
         return None
 
 
+@st.cache_data(show_spinner='Processing BLAST results.')
 def process_stream(stream, save=True, save_name='BLAST_results'):
     """
     Function to process a stream object into a dataframe and save it as a .csv file.
