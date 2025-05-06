@@ -288,7 +288,7 @@ def process_stream(stream, save=True, save_name='BLAST_results'):
         blast_accessions['title'].append(record)
 
         rec = fetch_sequence(record, email='orogers@wesleyan.edu')
-        blast_accessions['sequence'].append(rec.seq)
+        blast_accessions['sequence'].append(str(rec.seq))
 
         try:
             blast_accessions['summary'].append(rec.annotations['comment'])
