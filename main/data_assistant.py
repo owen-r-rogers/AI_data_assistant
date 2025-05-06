@@ -31,7 +31,10 @@ if ncbi_acc_known:
 
             handle = nucleotide_blast(accession_input, hitlist_size=hitsize)
             blast_results = process_stream(handle, save=False)
-            st.write(blast_results)
+
+            st.write(type(blast_results['sequence'][0]))
+
+            #st.write(blast_results)
 
 if ncbi_acc_unknown:
     inq_input = st.text_input('What accession number are you interested in finding?')
