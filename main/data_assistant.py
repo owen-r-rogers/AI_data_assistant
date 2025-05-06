@@ -44,12 +44,12 @@ if ncbi_acc_known:
 
                 with st.status('Preparing data for embedding...'):
 
-                    prepped = prepare_for_embedding(blast_results)
+                    _, matrix = prepare_for_embedding(blast_results)
 
-                    with st.status('Displaying embeddings...'):
+                with st.status('Displaying embeddings...'):
 
-                        fig, ax = plot_tsne(prepped)
-                        st.pyplot(fig)
+                    fig, ax = plot_tsne(matrix)
+                    st.pyplot(fig)
 
 
 if ncbi_acc_unknown:
