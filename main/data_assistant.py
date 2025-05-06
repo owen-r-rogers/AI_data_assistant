@@ -11,6 +11,9 @@ from langchain_community.document_loaders import PyMuPDFLoader
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.data_assistant_utils import *
 
+load_dotenv()
+openai_api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = openai_api_key
 
 st.set_page_config(page_title='data_assistant.py', layout='wide')
 st.title('Automated clustering and analysis of BLAST search')
@@ -25,7 +28,7 @@ if ncbi_acc_known:
         st.write(f'You entered {accession_input}')
 
         # insert slider for how many hits to display
-        hitsize = int(st.text_input('Enter how many hits to return'))
+        hitsize = st.text_input('Enter how many hits to return')
 
         if hitsize:
 
