@@ -25,7 +25,7 @@ if ncbi_acc_known:
         st.write(f'You entered {accession_input}')
 
         # insert slider for how many hits to display
-        hitsize = st.text_input('Enter how many hits to return')
+        hitsize = int(st.text_input('Enter how many hits to return'))
 
         if hitsize:
 
@@ -47,7 +47,7 @@ if ncbi_acc_known:
 
                         fig, ax = plot_tsne(prepped)
                         st.pyplot(fig)
-                        
+
 
 if ncbi_acc_unknown:
     inq_input = st.text_input('What accession number are you interested in finding?')
