@@ -356,18 +356,17 @@ def prepare_for_embedding(processed_stream):
     embedded_seqs = batch_embed(documents)
 
     df = pd.DataFrame(embedded_seqs)
+    matrix = df.values
     assert len(df) == len(processed_stream), 'The two dataframes are not equal in length'
     df['title'] = processed_stream['title']
 
-    return df
+    return df, matrix
 
 
-def plot_tsne(df):
+def plot_tsne(matrix):
     """
     Take output of prepare_for_embedding() and plot t-SNE
     """
-
-    matrix = df.values
 
     tsne = TSNE(n_components=2, perplexity=15, random_state=42, init='random', learning_rate='auto')
 
