@@ -393,3 +393,4 @@ def plot_tsne(df):
     ax.spines['bottom'].set_linewidth(2)
     ax.spines['bottom'].set_color('black')
 
+    return fig, ax
