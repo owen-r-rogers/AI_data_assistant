@@ -235,15 +235,15 @@ def fetch_sequence(accession_no,
 
 
 @st.cache_data(show_spinner='Running BLAST')
-def nucleotide_blast(sequence, database='nt', hitlist_size=50, entrez_query=None):
+def nucleotide_blast(_sequence, database='nt', hitlist_size=50, entrez_query=None):
 
     try:
         # Perform BLAST search
 
         if entrez_query is not None:
-            result_handle = NCBIWWW.qblast('blastn', database, sequence, hitlist_size=hitlist_size,entrez_query=entrez_query)
+            result_handle = NCBIWWW.qblast('blastn', database, _sequence, hitlist_size=hitlist_size, entrez_query=entrez_query)
         else:
-            result_handle = NCBIWWW.qblast('blastn', database, sequence,hitlist_size=hitlist_size)
+            result_handle = NCBIWWW.qblast('blastn', database, _sequence,hitlist_size=hitlist_size)
 
         return result_handle
 
@@ -378,12 +378,14 @@ def plot_tsne(matrix):
     y = [y for x, y in vis_dims]
 
     # create plot
-    fig, ax = plt.subplots(figsize=(8, 8))
+    fig, ax = plt.subplots(figsize=(5, 5), dpi=300)
     sns.scatterplot(x=x, y=y, ax=ax, s=200, alpha=0.6, color='red', marker='o', edgecolor='black')
 
     ax.set_xlabel('Dimension 1', fontsize=16)
     ax.set_ylabel('Dimension 2', fontsize=16)
     ax.set_title('t-SNE embeddings', fontsize=28)
+
+    plt.grid(False)
 
     ax.spines['top'].set_linewidth(2)
     ax.spines['top'].set_color('black')
