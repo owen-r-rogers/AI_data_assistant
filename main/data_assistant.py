@@ -48,8 +48,24 @@ if ncbi_acc_known:
 
                 with st.status('Displaying embeddings...'):
 
-                    fig, ax = plot_tsne(matrix)
-                    st.pyplot(fig)
+                    tsne_fig, tsne_ax = plot_tsne(matrix)
+                    pca_fig, pca_ax = plot_pca(matrix)
+
+                tab1, tab2, tab3 = st.tabs(['t-SNE plot', 'PCA plot', 'Data'])
+
+                with tab1:
+
+                    st.pyplot(tsne_fig)
+
+                with tab2:
+
+                    st.pyplot(pca_fig)
+
+                with tab3:
+                    st.header('Raw embeddings of the BLAST results.')
+                    st.write(matrix)
+
+
 
 
 if ncbi_acc_unknown:
