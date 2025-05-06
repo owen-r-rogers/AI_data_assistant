@@ -35,7 +35,7 @@ if ncbi_acc_known:
             handle = nucleotide_blast(accession_input, hitlist_size=hitsize)
             blast_results = process_stream(handle, save=False)
 
-            #st.write(type(blast_results['sequence'][0]))
+            # st.write(type(blast_results['sequence'][0]))
             st.write(blast_results)
 
             embed = st.checkbox('Embed BLAST results?')
