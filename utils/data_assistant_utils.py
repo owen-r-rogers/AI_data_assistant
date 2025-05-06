@@ -22,6 +22,11 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.chains.retrieval import create_retrieval_chain
 
 from sklearn.manifold import TSNE
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+
+
 
 class Draft:
     def __init__(self,
@@ -344,6 +349,9 @@ def batch_embed(documents, batch_size=20, delay=1.0, model='text-embedding-ada-0
 
 
 def prepare_for_embedding(processed_stream):
+    """
+    Rename to embed - this embeds and prepares it
+    """
 
     # process data from processed_stream df that will be necessary for embedding
     for_clustering = processed_stream[['title', 'sequence', 'summary', 'e_value', 'score']]
@@ -378,7 +386,7 @@ def plot_tsne(matrix):
     y = [y for x, y in vis_dims]
 
     # create plot
-    fig, ax = plt.subplots(figsize=(5, 5), dpi=300)
+    fig, ax = plt.subplots(figsize=(5, 5))
     sns.scatterplot(x=x, y=y, ax=ax, s=200, alpha=0.6, color='red', marker='o', edgecolor='black')
 
     ax.set_xlabel('Dimension 1', fontsize=16)
@@ -397,3 +405,43 @@ def plot_tsne(matrix):
     ax.spines['bottom'].set_color('black')
 
     return fig, ax
+
+
+def plot_pca(matrix):
+
+    scaler = StandardScaler()
+
+    scaled_data = scaler.fit_transform(matrix)
+
+    pca = PCA(n_components=2)
+
+    data = pca.fit_transform(scaled_data)
+
+    pca_df = pd.DataFrame(
+        {
+            'PC1': data[:, 0],
+            'PC2': data[:, 1]
+        }
+    )
+
+    fig, ax = plt.subplots(figsize=(5, 5))
+
+    sns.scatterplot(data=pca_df, x='PC1', y='PC2', ax=ax, s=100, alpha=0.6, color='purple', marker='o', edgecolor='black')
+
+    ax.set_xlabel('Principal component 1', fontsize=16)
+    ax.set_ylabel('Principal component 2', fontsize=16)
+    ax.set_title('Principal Component Analysis of embeddings', fontsize=28)
+
+    plt.grid(False)
+
+    ax.spines['top'].set_linewidth(2)
+    ax.spines['top'].set_color('black')
+    ax.spines['right'].set_linewidth(2)
+    ax.spines['right'].set_color('black')
+    ax.spines['left'].set_linewidth(2)
+    ax.spines['left'].set_color('black')
+    ax.spines['bottom'].set_linewidth(2)
+    ax.spines['bottom'].set_color('black')
+
+    return fig, ax
+
