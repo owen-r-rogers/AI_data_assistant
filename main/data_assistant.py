@@ -1,13 +1,5 @@
 import sys
 import os
-
-import langchain.document_loaders
-
-import langchain_community.vectorstores
-import langchain_openai
-
-from langchain_community.document_loaders import PyMuPDFLoader
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.data_assistant_utils import *
 
@@ -15,13 +7,23 @@ load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 openai.api_key = openai_api_key
 
+
 st.set_page_config(page_title='data_assistant.py', layout='wide')
 st.title('Automated clustering and analysis of BLAST search')
 
-ncbi_acc_known = st.checkbox('I know the accession number I want to BLAST.')
-ncbi_acc_unknown = st.checkbox('I do NOT know the accession number I want to BLAST.')
 
-if ncbi_acc_known:
+acc_option = st.radio(
+    'How do you want to provide the accession number to BLAST?',
+
+    [
+        'I know the accession number',
+        'I do NOT know the accession number',
+        'I want to upload a file'
+    ]
+)
+
+
+if acc_option == 'I know the accession number':
     accession_input = st.text_input('Enter an NCBI accession number.')
 
     if accession_input:
@@ -44,7 +46,7 @@ if ncbi_acc_known:
 
                 with st.status('Preparing data for embedding...'):
 
-                    _, matrix = prepare_for_embedding(blast_results)
+                    blast_df, matrix = prepare_for_embedding(blast_results)
 
                 with st.status('Displaying embeddings...'):
 
@@ -55,11 +57,11 @@ if ncbi_acc_known:
 
                 with tab1:
 
-                    st.pyplot(tsne_fig)
+                    st.pyplot(tsne_fig, use_container_width=True)
 
                 with tab2:
 
-                    st.pyplot(pca_fig)
+                    st.pyplot(pca_fig, use_container_width=True)
 
                 with tab3:
                     st.header('Raw embeddings of the BLAST results.')
@@ -68,7 +70,7 @@ if ncbi_acc_known:
 
 
 
-if ncbi_acc_unknown:
+if acc_option == 'I do NOT know the accession number':
     inq_input = st.text_input('What accession number are you interested in finding?')
 
     if inq_input:
@@ -78,3 +80,53 @@ if ncbi_acc_unknown:
         st.write('Retrieving the NCBI accession number for your inquery.')
         st.write(f'The accession number for your prompt - {inq_input} - is:')
         st.write(acc)
+
+        hitsize = st.text_input('Enter how many hits to return')
+
+        if hitsize:
+
+            handle = nucleotide_blast(acc, hitlist_size=hitsize)
+            blast_results = process_stream(handle, save=False)
+
+            st.write(blast_results)
+
+            embed = st.checkbox('Embed BLAST results?')
+
+            if embed:
+
+                with st.status('Preparing data for embedding...'):
+
+                    blast_df, matrix = prepare_for_embedding(blast_results)
+
+                with st.status('Displaying embeddings...'):
+
+                    tsne_fig, tsne_ax = plot_tsne(matrix)
+                    pca_fig, pca_ax = plot_pca(matrix)
+
+                tab1, tab2, tab3 = st.tabs(['t-SNE plot', 'PCA plot', 'Data'])
+
+                with tab1:
+
+                    st.pyplot(tsne_fig, use_container_width=True)
+
+                with tab2:
+
+                    st.pyplot(pca_fig, use_container_width=True)
+
+                with tab3:
+                    st.header('Raw embeddings of the BLAST results.')
+                    st.write(matrix)
+
+    # st.write('Hello')
+
+if acc_option == 'I want to upload a file':
+
+    uploaded_file = st.file_uploader('Upload your file containing BLAST results')
+
+    if uploaded_file is not None:
+
+        df = pd.read_csv(uploaded_file)
+        st.text_area('File contents', df.head(), height=200)
+
+
+
