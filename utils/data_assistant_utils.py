@@ -217,6 +217,42 @@ def ask_ai(system_prompt, user_prompt):
     return accession.choices[0].message.content
 
 
+def ask_an_ai(draft_sp, draft_up,
+           critique_sp='You are a domain expert.', critique_up=None,
+           report_sp='You are the final reporter summarizing an initial guess and its critique.', report_up=None):
+
+
+    # initialize Draft
+    draft = Draft(max_tokens=600, temperature=0.7)
+    draft.prime()
+    guess = draft.generate(draft_sp, draft_up)
+
+    # initialize Critique
+    critique = Critique(guess)
+    critique.prime()
+    if critique_up is None:
+        critique_up = f'Please evaluate the accuracy of {guess} and provide feedback.'
+    evaluation = critique.generate(critique_sp, critique_up)
+
+    # initialize Report
+    report = Report(guess, evaluation)
+    if report_up is None:
+        report_prompt = f'Please integrate the critique:\n\n"{evaluation}"\n\nwith the initial guess:\n\n"{guess}"'
+    else:
+        report_prompt = report_up.format(guess=guess, evaluation=evaluation)
+
+    final_report = report.report(user_prompt=report_prompt, system_prompt=report_sp)
+
+    response = openai.chat.completions.create(
+        model='gpt-3.5-turbo',
+        messages=[{'role': 'user', 'content': final_report}],
+        temperature=0.0,
+        max_tokens=100
+    )
+
+    return response.choices[0].message.content
+
+
 def fetch_sequence(accession_no,
                    db='nucleotide',
                    rettype='gb',
@@ -382,27 +418,38 @@ def plot_tsne(matrix):
 
     vis_dims = tsne.fit_transform(matrix)
 
-    x = [x for x, y in vis_dims]
-    y = [y for x, y in vis_dims]
+    # Create DataFrame with index coloring
+    df = pd.DataFrame({
+        'x': vis_dims[:, 0],
+        'y': vis_dims[:, 1],
+        'Index': np.arange(len(vis_dims))
+    })
 
-    # create plot
-    fig, ax = plt.subplots(figsize=(5, 5))
-    sns.scatterplot(x=x, y=y, ax=ax, s=200, alpha=0.6, color='red', marker='o', edgecolor='black')
+    fig, ax = plt.subplots(figsize=(5, 5), dpi=300)
+
+    scatter = sns.scatterplot(
+        data=df,
+        x='x',
+        y='y',
+        hue='Index',
+        palette='viridis',
+        ax=ax,
+        s=200,
+        alpha=0.6,
+        edgecolor='black'
+    )
+
+    ax.legend(title='Index', bbox_to_anchor=(1, 1), fontsize=12)
 
     ax.set_xlabel('Dimension 1', fontsize=16)
     ax.set_ylabel('Dimension 2', fontsize=16)
     ax.set_title('t-SNE embeddings', fontsize=28)
-
     plt.grid(False)
 
-    ax.spines['top'].set_linewidth(2)
-    ax.spines['top'].set_color('black')
-    ax.spines['right'].set_linewidth(2)
-    ax.spines['right'].set_color('black')
-    ax.spines['left'].set_linewidth(2)
-    ax.spines['left'].set_color('black')
-    ax.spines['bottom'].set_linewidth(2)
-    ax.spines['bottom'].set_color('black')
+    for spine in ['top', 'right', 'left', 'bottom']:
+        ax.spines[spine].set_linewidth(2)
+        ax.spines[spine].set_color('black')
+
 
     return fig, ax
 
@@ -420,19 +467,22 @@ def plot_pca(matrix):
     pca_df = pd.DataFrame(
         {
             'PC1': data[:, 0],
-            'PC2': data[:, 1]
+            'PC2': data[:, 1],
+            'Index': np.arange(len(data))
         }
     )
 
-    fig, ax = plt.subplots(figsize=(5, 5))
+    fig, ax = plt.subplots(figsize=(5, 5), dpi=300)
 
-    sns.scatterplot(data=pca_df, x='PC1', y='PC2', ax=ax, s=100, alpha=0.6, color='purple', marker='o', edgecolor='black')
+    sns.scatterplot(data=pca_df, x='PC1', y='PC2', ax=ax, hue='Index', palette='magma', s=200, alpha=0.6, color='purple', marker='o', edgecolor='black')
 
     ax.set_xlabel('Principal component 1', fontsize=16)
     ax.set_ylabel('Principal component 2', fontsize=16)
     ax.set_title('Principal Component Analysis of embeddings', fontsize=28)
 
     plt.grid(False)
+
+    ax.legend(title='Index', bbox_to_anchor=(1, 1), fontsize=12)
 
     ax.spines['top'].set_linewidth(2)
     ax.spines['top'].set_color('black')
